@@ -5,18 +5,18 @@
 typedef struct nord {
 	int data;
 	struct nord * next;
-}NORD;
+}NODE;
 
-NORD * create_single_list(int * array, int length)
+NODE * create_single_list(int * array, int length)
 {
-	//NORD head = {0, NULL};
-	NORD * head = (NORD *)malloc(sizeof(NORD));
+	//NODE head = {0, NULL};
+	NODE * head = (NODE *)malloc(sizeof(NODE));
 	head->next = NULL;
-	NORD * p = NULL;
+	NODE * p = NULL;
 	int i = 0;
 	p = head;
 	for(i=0; i<length;i++ ){
-		NORD * element = (NORD *)malloc(sizeof(NORD));
+		NODE * element = (NODE *)malloc(sizeof(NODE));
 		element->data =*(array+i);
 		p->next = element;	
 		p = p->next;
@@ -24,11 +24,28 @@ NORD * create_single_list(int * array, int length)
 	p->next = NULL;
 	return head;
 }
-NORD * revert_single_list(NORD * head)
+NODE * revert_single_list_new(NODE * head)
 {
-	NORD * p = NULL;
-	NORD * q = NULL;
-	NORD * z = NULL;
+	NODE *temp = head;
+	NODE *pre  = NULL;
+	NODE * next = NULL;
+	while(temp->next != NULL)
+	{
+		next = temp->next;
+		temp->next = pre;	
+		pre = temp;
+		temp = next;
+	}
+	temp->next = pre;
+	head = temp;
+	return head;
+}
+
+NODE * revert_single_list(NODE * head)
+{
+	NODE * p = NULL;
+	NODE * q = NULL;
+	NODE * z = NULL;
 	p = head->next;
 	q = p->next;
 	p->next = NULL;
@@ -42,10 +59,13 @@ NORD * revert_single_list(NORD * head)
 	head->next = q;
 	return head;
 }
-void print_list(NORD * head)
+
+
+
+void print_list(NODE * head)
 {
 	int i = 0;
-	NORD * p = head;
+	NODE * p = head;
 	while(p != NULL) {
 		printf("->%d", p->data);
 		p = p->next;
@@ -56,13 +76,14 @@ int main(int argc, char ** argv)
 {
 	int array[6] = {2, 3, 4, 6, 89, 10};
 	int len = 0;
-	NORD * list = create_single_list(array, len = sizeof(array)/sizeof(int)); 
+	NODE * list = create_single_list(array, len = sizeof(array)/sizeof(int)); 
 	printf("len=%d\n", len);
 	print_list (list);
 	printf("\n");
 
-	list = revert_single_list(list);
+	//list = revert_single_list(list);
+	list = revert_single_list_new(list);
 	print_list (list);
 	printf("\n");
-	return;
+	return 0;
 }
